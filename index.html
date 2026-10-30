@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#3b1029">
+  <title>Zayra | Bijuterias, semijoias e maquiagem por R$ 10 e R$ 20</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.5"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5s-8-4.7-8-10.6A4.4 4.4 0 0 1 12 7.3a4.4 4.4 0 0 1 8 2.6c0 5.9-8 10.6-8 10.6Z"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#produtos">Pular para os produtos</a>
+  <p class="strip">Frete grátis em compras a partir de R$ 99</p>
+
+  <header class="site-header">
+    <div class="header-row wrap">
+      <a class="brand" href="#" aria-label="Zayra, página inicial"><img src="assets/logo-zayra.jpg" alt=""></a>
+      <form class="search" id="searchForm" role="search">
+        <label class="sr-only" for="searchInput">Buscar produtos</label>
+        <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="searchInput" type="search" placeholder="Buscar brinco, batom, colar…" autocomplete="off">
+      </form>
+      <div class="header-actions">
+        <button class="icon-btn" id="accountBtn" type="button" aria-label="Minha conta"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></button>
+        <button class="icon-btn" id="favoritesBtn" type="button" aria-pressed="false" aria-label="Mostrar favoritos"><svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg><span class="count" id="favoriteCount">0</span></button>
+        <button class="icon-btn" id="cartBtn" type="button" aria-label="Abrir sacola"><svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg><span class="count" id="cartCount">0</span></button>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Categorias">
+      <div class="nav-inner wrap">
+        <a href="#produtos" data-category="Maquiagem">Maquiagem</a>
+        <a href="#produtos" data-category="Bijuterias">Bijuterias</a>
+        <a href="#produtos" data-category="Semijoias">Semijoias</a>
+        <a href="#produtos" data-category="Acessórios">Acessórios</a>
+        <a href="#produtos" data-category="Kits">Kits</a>
+        <a href="#produtos" class="nav-price" data-price="10">Tudo de R$ 10</a>
+        <a href="#produtos" class="nav-price" data-price="20">Tudo de R$ 20</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-inner wrap">
+        <div class="hero-copy">
+          <h1>Maquiagem, bijuterias e semijoias por R$&nbsp;10 ou R$&nbsp;20.</h1>
+          <p>A loja inteira tem só dois preços. Escolha o seu e veja tudo o que cabe nele.</p>
+        </div>
+        <div class="hero-tags">
+          <div class="tag-hang"><button class="price-tag tag-10" type="button" data-price="10"><span class="tag-cur">R$</span><span class="tag-value">10</span><span class="tag-meta" data-count-price="10"></span></button></div>
+          <div class="tag-hang"><button class="price-tag tag-20" type="button" data-price="20"><span class="tag-cur">R$</span><span class="tag-value">20</span><span class="tag-meta" data-count-price="20"></span></button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="categories wrap" aria-labelledby="categoriesTitle">
+      <h2 id="categoriesTitle">Compre por categoria</h2>
+      <div class="category-row">
+        <button class="category" type="button" data-category="Maquiagem"><img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=480&h=600&q=75" alt="" loading="lazy"><span class="category-name">Maquiagem</span><span class="category-count" data-count-category="Maquiagem"></span></button>
+        <button class="category" type="button" data-category="Bijuterias"><img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=480&h=600&q=75" alt="" loading="lazy"><span class="category-name">Bijuterias</span><span class="category-count" data-count-category="Bijuterias"></span></button>
+        <button class="category" type="button" data-category="Semijoias"><img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=480&h=600&q=75" alt="" loading="lazy"><span class="category-name">Semijoias</span><span class="category-count" data-count-category="Semijoias"></span></button>
+        <button class="category" type="button" data-category="Acessórios"><img src="https://images.unsplash.com/photo-1598452963314-b09f397a5c48?auto=format&fit=crop&w=480&h=600&q=75" alt="" loading="lazy"><span class="category-name">Acessórios</span><span class="category-count" data-count-category="Acessórios"></span></button>
+        <button class="category" type="button" data-category="Kits"><img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=480&h=600&q=75" alt="" loading="lazy"><span class="category-name">Kits</span><span class="category-count" data-count-category="Kits"></span></button>
+      </div>
+    </section>
+
+    <section class="products wrap" id="produtos" aria-labelledby="productHeading">
+      <div class="products-head">
+        <h2 id="productHeading">Todos os produtos</h2>
+        <p id="resultSummary" aria-live="polite"></p>
+      </div>
+      <div class="toolbar">
+        <div class="seg" role="group" aria-label="Filtrar por preço">
+          <button type="button" data-seg="Todos" aria-pressed="true">Todos</button>
+          <button type="button" data-seg="10" aria-pressed="false">R$ 10</button>
+          <button type="button" data-seg="20" aria-pressed="false">R$ 20</button>
+        </div>
+        <label class="field">Categoria
+          <select id="categoryFilter"><option value="Todos">Todas</option><option>Maquiagem</option><option>Bijuterias</option><option>Semijoias</option><option>Acessórios</option><option>Kits</option></select>
+        </label>
+        <label class="field">Ordenar
+          <select id="sortFilter"><option value="featured">Destaques</option><option value="priceAsc">Menor preço</option><option value="priceDesc">Maior preço</option><option value="name">Nome, A a Z</option></select>
+        </label>
+        <button class="link-btn hidden" id="clearFilters" type="button">Limpar filtros</button>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+      <div class="empty-state hidden" id="emptyState">
+        <h3>Nenhum produto encontrado</h3>
+        <p>Confira a grafia ou tente um termo mais simples, como “brinco” ou “batom”.</p>
+        <button class="btn" id="emptyReset" type="button">Ver todos os produtos</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner wrap">
+      <div class="footer-brand">
+        <img src="assets/logo-zayra.jpg" alt="Zayra Bijuterias e Semijoias">
+      </div>
+      <nav class="footer-col" aria-label="Atendimento">
+        <h2>Atendimento</h2>
+        <a href="#contato">Fale com a gente</a>
+        <a href="#trocas">Trocas e devoluções</a>
+        <a href="#entrega">Prazos de entrega</a>
+      </nav>
+      <nav class="footer-col" aria-label="Institucional">
+        <h2>A Zayra</h2>
+        <a href="#sobre">Sobre a loja</a>
+        <a href="#privacidade">Privacidade</a>
+        <a href="#termos">Termos de uso</a>
+      </nav>
+      <div class="footer-col footer-news">
+        <h2>Novidades por e-mail</h2>
+        <p>Peças novas toda semana. Um e-mail quando chegarem.</p>
+        <form id="newsletterForm">
+          <label class="sr-only" for="newsEmail">Seu e-mail</label>
+          <input id="newsEmail" type="email" required placeholder="seu@email.com" autocomplete="email">
+          <button class="btn btn-gold" type="submit">Assinar</button>
+        </form>
+      </div>
+      <p class="fineprint">© 2026 Zayra. Protótipo: produtos, preços e pagamentos são exemplos. Aceitaremos Pix, cartão e boleto.</p>
+    </div>
+  </footer>
+
+  <div class="overlay hidden" id="overlay"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true" tabindex="-1">
+    <div class="drawer-header">
+      <div><h2 id="cartTitle">Sacola</h2><p id="cartSubtitle"></p></div>
+      <button class="icon-btn" id="closeCart" type="button" aria-label="Fechar sacola"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="ship">
+        <p id="shippingNote"></p>
+        <div class="ship-meter" aria-hidden="true"><span id="shipBar"></span></div>
+      </div>
+      <div class="totals"><span>Subtotal</span><strong id="cartSubtotal">R$ 0,00</strong></div>
+      <div class="totals muted"><span>Frete</span><span id="shippingValue">Calculado no checkout</span></div>
+      <button class="btn btn-block" id="goCheckout" type="button">Ir para o pagamento</button>
+      <button class="link-btn center" id="continueShopping" type="button">Continuar comprando</button>
+    </div>
+  </aside>
+
+  <section class="checkout-modal hidden" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle" tabindex="-1">
+    <div class="checkout-top">
+      <div><h2 id="checkoutTitle">Finalizar pedido</h2><p>Esta é uma simulação: nada é cobrado e nenhum dado sai do seu navegador.</p></div>
+      <button class="icon-btn" id="closeCheckout" type="button" aria-label="Fechar"><svg class="icon" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="checkout-layout" id="checkoutLayout">
+      <form id="checkoutForm" class="checkout-form" novalidate>
+        <fieldset>
+          <legend>Seus dados</legend>
+          <div class="form-grid">
+            <label>Nome completo<input name="name" required autocomplete="name"></label>
+            <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
+            <label>Telefone ou WhatsApp<input name="phone" type="tel" required autocomplete="tel" placeholder="(00) 00000-0000"></label>
+            <label>CEP<input name="cep" required inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000" pattern="\d{5}-?\d{3}"></label>
+            <label class="full">Endereço e número<input name="address" required autocomplete="street-address"></label>
+            <label>Bairro<input name="neighborhood" required></label>
+            <label>Cidade<input name="city" required autocomplete="address-level2"></label>
+            <label>Estado<input name="state" required maxlength="2" autocomplete="address-level1" placeholder="UF"></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Entrega</legend>
+          <label class="choice"><input type="radio" name="delivery" value="standard" checked><span>Padrão</span><small id="standardPrice">R$ 9,90</small></label>
+          <label class="choice"><input type="radio" name="delivery" value="express"><span>Expressa</span><small>R$ 15,00</small></label>
+        </fieldset>
+        <fieldset>
+          <legend>Pagamento</legend>
+          <div class="choice-row">
+            <label class="choice"><input type="radio" name="payment" value="pix" checked><span>Pix</span></label>
+            <label class="choice"><input type="radio" name="payment" value="card"><span>Cartão</span></label>
+            <label class="choice"><input type="radio" name="payment" value="boleto"><span>Boleto</span></label>
+          </div>
+        </fieldset>
+        <p class="form-error hidden" id="formError" role="alert"></p>
+        <button class="btn btn-block" type="submit">Finalizar pedido</button>
+      </form>
+      <aside class="order-summary" aria-labelledby="summaryTitle">
+        <h3 id="summaryTitle">Seu pedido</h3>
+        <div id="checkoutItems"></div>
+        <div class="totals"><span>Subtotal</span><span id="checkoutSubtotal">R$ 0,00</span></div>
+        <div class="totals"><span>Frete</span><span id="checkoutShipping">R$ 9,90</span></div>
+        <div class="totals grand-total"><span>Total</span><strong id="checkoutTotal">R$ 0,00</strong></div>
+      </aside>
+    </div>
+    <div class="success-state hidden" id="checkoutSuccess"></div>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
