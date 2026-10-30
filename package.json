@@ -4,10 +4,8 @@
   "private": true,
   "description": "Protótipo de e-commerce da Zayra em HTML, CSS e JavaScript puro.",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
+    "dev": "node dev-server.js"
   },
-  "main": "script.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
