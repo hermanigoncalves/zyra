@@ -2,7 +2,7 @@
   "name": "zayra",
   "version": "1.0.0",
   "private": true,
-  "description": "Protótipo de e-commerce da Zayra em HTML, CSS e JavaScript puro.",
+  "description": "Protótipo de e-commerce da Lua Belly em HTML, CSS e JavaScript puro.",
   "scripts": {
     "dev": "node dev-server.js"
   },

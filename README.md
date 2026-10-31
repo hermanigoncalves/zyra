@@ -1,6 +1,6 @@
-# Zayra — protótipo de e-commerce
+# Lua Belly — protótipo de e-commerce
 
-Protótipo front-end responsivo em HTML, CSS e JavaScript puro para a loja Zayra.
+Protótipo front-end responsivo em HTML, CSS e JavaScript puro para a loja Lua Belly (slogan: "Seu brilho é a sua presença").
 
 ## Como executar
 Com Node.js instalado (não há dependências para instalar):
@@ -30,4 +30,4 @@ Também funciona abrindo `index.html` direto no navegador.
 - As imagens de produtos e hero usam URLs externas do Unsplash; é necessária internet para carregá-las.
 - O checkout é apenas uma simulação: não processa pagamentos, não envia pedidos a um servidor e não persiste os dados pessoais.
 - Antes de vender de verdade, integrar backend/API, banco de dados, estoque, cálculo de frete, gateway de pagamento, políticas da loja, LGPD e segurança.
-- A logomarca enviada foi incluída em `assets/logo-zayra.jpg`.
+- A logomarca enviada foi incluída em `assets/logo-luabelly.webp`.

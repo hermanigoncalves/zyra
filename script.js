@@ -193,7 +193,7 @@ form.addEventListener('submit', e => {
  const orderId = 'ZY-' + Math.floor(100000 + Math.random() * 900000), total = $('checkoutTotal').textContent;
  $('checkoutLayout').classList.add('hidden');
  const success = $('checkoutSuccess');
- success.innerHTML = `<div class="ok">${ic('check')}</div><h3>Pedido ${orderId} registrado, ${esc(first)}.</h3><p>Total: <strong>${total}</strong>.</p><p class="muted">Como isto é uma simulação, nenhum pagamento foi feito e seus dados não saíram deste navegador.</p><button class="btn" id="finishDemo" type="button">Voltar para a loja</button>`;
+ success.innerHTML = `<div class="ok">${ic('check')}</div><h3>Pedido ${orderId} registrado, ${esc(first)}.</h3><p class="slogan">Seu brilho é a sua presença</p><p>Total: <strong>${total}</strong>.</p><p class="muted">Como isto é uma simulação, nenhum pagamento foi feito e seus dados não saíram deste navegador.</p><button class="btn" id="finishDemo" type="button">Voltar para a loja</button>`;
  success.classList.remove('hidden'); $('finishDemo').focus();
  $('finishDemo').addEventListener('click', () => { cart = []; save(); form.reset(); renderCart(); closePanels(); toast('Sacola esvaziada. Boas compras!') });
 });

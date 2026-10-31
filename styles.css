@@ -1,4 +1,4 @@
-/* Zayra: expositor de bijuteria. Veludo ameixa, etiquetas de preço, cartelas com furo. */
+/* Lua Belly: expositor de bijuteria. Veludo ameixa, etiquetas de preço, cartelas com furo. */
 :root{
   --veludo:#3b1029;      /* fundo do expositor, rodapé, texto forte */
   --veludo-2:#521a3b;
@@ -39,8 +39,9 @@ h1,h2,h3{margin:0;font-weight:700;line-height:1.1}
 .strip{margin:0;background:var(--veludo);color:var(--rosa-tag);text-align:center;font-size:13px;padding:7px 16px;letter-spacing:.01em}
 .site-header{background:var(--branco);border-bottom:1px solid var(--linha);position:sticky;top:0;z-index:10}
 .header-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;height:84px}
-.brand{display:block;width:132px;height:72px;overflow:hidden;position:relative;border-radius:var(--raio)}
-.brand img{position:absolute;width:184px;max-width:none;height:184px;left:-26px;top:-50px}
+.brand{display:block;width:140px;height:72px;overflow:hidden;position:relative;border-radius:var(--raio)}
+.brand img{position:absolute;width:176px;max-width:none;height:176px;left:-20px;top:-44px}
+.slogan{margin:24px 0 0;font-family:'Parisienne',cursive;font-size:44px;line-height:1.15;color:var(--ouro)}
 .search{display:flex;align-items:center;gap:10px;max-width:560px;width:100%;justify-self:center;height:46px;padding:0 16px;border:1px solid var(--linha);border-radius:999px;background:var(--papel);color:var(--suave)}
 .search:focus-within{border-color:var(--framboesa);background:#fff}
 .search input{flex:1;min-width:0;align-self:stretch;border:0;background:transparent;outline:0;font-size:15px;color:var(--tinta)}
@@ -66,6 +67,7 @@ h1,h2,h3{margin:0;font-weight:700;line-height:1.1}
 .hero-inner{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:40px;min-height:440px;padding-block:24px 56px}
 .hero h1{font-size:clamp(34px,4.4vw,58px);font-variation-settings:'wdth' 112;font-weight:700;line-height:1.04;letter-spacing:-.015em;color:#fff;max-width:14ch}
 .hero-copy p{font-size:18px;line-height:1.55;max-width:38ch;margin:20px 0 0;color:var(--rosa-tag)}
+.hero-copy .slogan{margin-top:28px;font-size:44px;line-height:1.15;color:var(--ouro);max-width:none}
 .hero-tags{display:flex;justify-content:center;gap:clamp(20px,4vw,52px);align-self:start}
 .tag-hang{position:relative;padding-top:96px;transform-origin:50% 0}
 .tag-hang::before{content:"";position:absolute;left:50%;top:-24px;height:146px;width:1.5px;background:linear-gradient(var(--ouro),#c9a15a);transform:translateX(-50%)}
@@ -142,6 +144,7 @@ h1,h2,h3{margin:0;font-weight:700;line-height:1.1}
 .footer{background:var(--veludo);color:var(--rosa-tag)}
 .footer-inner{display:grid;grid-template-columns:auto 1fr 1fr 1.6fr;gap:40px;padding:56px 0 28px}
 .footer-brand img{width:132px;height:132px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--ouro)}
+.footer-brand .slogan{margin-top:14px;font-size:30px}
 .footer-col{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .footer-col h2{font-size:15px;color:#fff;margin-bottom:4px}
 .footer-col a{text-decoration:none;font-size:15px}
@@ -211,6 +214,7 @@ legend{font-weight:700;font-size:18px;margin-bottom:12px;font-variation-settings
 .success-state h3{font-size:30px;font-variation-settings:'wdth' 112;margin-bottom:10px}
 .success-state p{margin:0 0 10px}
 .success-state .muted{margin-bottom:24px}
+.success-state .slogan{margin:0 0 16px;font-size:34px;color:var(--framboesa)}
 
 .toast{position:fixed;left:50%;bottom:24px;z-index:50;max-width:calc(100% - 32px);padding:12px 18px;border-radius:var(--raio);background:var(--veludo);color:#fff;font-size:15px;opacity:0;transform:translate(-50%,12px);pointer-events:none;transition:opacity .2s,transform .2s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -235,8 +239,9 @@ legend{font-weight:700;font-size:18px;margin-bottom:12px;font-variation-settings
 /* Celular */
 @media (max-width:640px){
   .header-row{grid-template-columns:auto 1fr;grid-template-rows:64px auto;gap:0 8px;height:auto;padding-bottom:12px}
-  .brand{width:112px;height:60px}
-  .brand img{width:156px;height:156px;left:-22px;top:-42px}
+  .brand{width:118px;height:60px}
+  .brand img{width:148px;height:148px;left:-17px;top:-37px}
+  .hero-copy .slogan{font-size:30px;margin-top:14px;white-space:nowrap}
   .header-actions{justify-self:end}
   .search{grid-column:1/-1;grid-row:2;max-width:none;height:44px}
   .site-header{position:static}
