@@ -2,10 +2,13 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "zayra-static",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5510"],
-      "port": 5510
+      "name": "luabelly",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "-e",
+        "require('./build.js');require('./dev-server.js')"
+      ],
+      "port": 8685
     }
   ]
 }

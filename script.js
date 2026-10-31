@@ -1,49 +1,35 @@
-const img = id => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=600&h=600&q=75`;
-const products = [
- {id:1,name:"Gloss labial hidratante",detail:"Várias cores",category:"Maquiagem",price:10,image:img("1591360236480-4ed861025fa1")},
- {id:2,name:"Máscara de cílios",detail:"Volume intenso",category:"Maquiagem",price:20,image:img("1608248543803-ba4f8c70ae0b")},
- {id:3,name:"Paleta de sombras",detail:"12 tons neutros",category:"Maquiagem",price:20,image:img("1596704017254-9b121068fb31")},
- {id:4,name:"Brinco argola dourada",detail:"Tamanho médio",category:"Bijuterias",price:10,image:img("1506630448388-4e683c67ddb0")},
- {id:5,name:"Colar coração vazado",detail:"Banho dourado",category:"Semijoias",price:20,image:img("1588444837495-c6cfeb53f32d")},
- {id:6,name:"Pulseira de elos",detail:"Fecho lagosta",category:"Bijuterias",price:20,image:img("1611591437281-460bfbe1220a")},
- {id:7,name:"Kit anéis finos",detail:"3 peças",category:"Kits",price:10,image:img("1605100804763-247f67b3557e")},
- {id:8,name:"Pincéis de maquiagem",detail:"5 peças para o dia a dia",category:"Acessórios",price:20,image:img("1512496015851-a90fb38ba796")},
- {id:9,name:"Brinco ponto de luz azul",detail:"Pedra facetada",category:"Semijoias",price:10,image:img("1535632066927-ab7c9ab60908")},
- {id:10,name:"Kit beleza essencial",detail:"Base, pó e pincel",category:"Kits",price:20,image:img("1522335789203-aabd1fc54bc9")},
- {id:11,name:"Pó compacto",detail:"Acabamento natural",category:"Maquiagem",price:10,image:img("1515688594390-b649af70d282")},
- {id:12,name:"Corrente dourada",detail:"45 cm",category:"Bijuterias",price:10,image:img("1602173574767-37ac01994b2a")},
- {id:13,name:"Colar gota",detail:"Pingente delicado",category:"Semijoias",price:20,image:img("1599643478518-a784e5dc4c8f")},
- {id:14,name:"Batom vermelho cremoso",detail:"Alta cobertura",category:"Maquiagem",price:10,image:img("1586495777744-4413f21062fa")}
-];
-const FREE_SHIPPING = 99, STANDARD = 9.9, EXPRESS = 15;
-const money = n => n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ic = name => `<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const {esc, money, ic, photo, productCard} = window.LB;
+const products = window.LB_PRODUCTS || [];
+const {freeShipping: FREE_SHIPPING, standard: STANDARD, express: EXPRESS} = window.LB_SHOP;
+const base = document.body.dataset.base || '';
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const load = key => { try { return JSON.parse(localStorage.getItem(key) || '[]') } catch { return [] } };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const $ = id => document.getElementById(id);
+const on = (id, type, fn) => $(id)?.addEventListener(type, fn);
 
+// As chaves mantêm o nome antigo para não esvaziar sacolas já salvas nos navegadores.
 let cart = load('zayraCart').filter(x => products.some(p => p.id === x.id));
 let favorites = load('zayraFavorites');
-let activeCategory = 'Todos', activePrice = 'Todos', query = '', favoritesOnly = false, toastTimer, lastFocus;
-const $ = id => document.getElementById(id);
+let toastTimer, lastFocus;
 const grid = $('productGrid'), overlay = $('overlay'), drawer = $('cartDrawer'), checkout = $('checkoutModal');
-const background = [document.querySelector('.skip-link'), document.querySelector('.strip'), document.querySelector('.site-header'), $('main'), document.querySelector('.footer')];
+const isHome = !!grid?.hasAttribute('data-home');
+const scope = {category: grid?.dataset.category || 'Todos', price: grid?.dataset.price || 'Todos'};
+const params = new URLSearchParams(location.search);
+let activeCategory = scope.category, activePrice = scope.price;
+let query = isHome ? (params.get('q') || '').trim() : '', favoritesOnly = isHome && params.has('favoritos');
+const background = ['.skip-link', '.strip', '.site-header', '#main', '.footer'].map(s => document.querySelector(s));
 
 function save(){ try { localStorage.setItem('zayraCart', JSON.stringify(cart)); localStorage.setItem('zayraFavorites', JSON.stringify(favorites)) } catch {} }
 function toast(message){ const el = $('toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2600) }
-function scrollToProducts(){ $('produtos').scrollIntoView({behavior: reduceMotion.matches ? 'auto' : 'smooth'}) }
+function scrollToProducts(){ $('produtos')?.scrollIntoView({behavior: reduceMotion.matches ? 'auto' : 'smooth'}) }
 function byId(id){ return products.find(p => p.id === id) }
-
-function fillCounts(){
- document.querySelectorAll('[data-count-price]').forEach(el => el.textContent = plural(products.filter(p => p.price === Number(el.dataset.countPrice)).length, 'produto', 'produtos'));
- document.querySelectorAll('[data-count-category]').forEach(el => el.textContent = products.filter(p => p.category === el.dataset.countCategory).length);
-}
+function setCount(el, n){ el.textContent = n; el.toggleAttribute('data-zero', n === 0) }
 
 function filteredProducts(){
  const q = query.toLowerCase();
  const list = products.filter(p => (activeCategory === 'Todos' || p.category === activeCategory) && (activePrice === 'Todos' || p.price === Number(activePrice)) && (!favoritesOnly || favorites.includes(p.id)) && (!q || `${p.name} ${p.detail} ${p.category}`.toLowerCase().includes(q)));
- const sort = $('sortFilter').value;
+ const sort = $('sortFilter')?.value;
  if (sort === 'priceAsc') list.sort((a, b) => a.price - b.price);
  if (sort === 'priceDesc') list.sort((a, b) => b.price - a.price);
  if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
@@ -59,33 +45,28 @@ function heading(){
 }
 
 function syncControls(){
- $('categoryFilter').value = activeCategory;
+ if ($('categoryFilter')) $('categoryFilter').value = activeCategory;
  document.querySelectorAll('[data-seg]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.seg === activePrice)));
- document.querySelectorAll('.nav a').forEach(a => a.setAttribute('aria-current', String(!favoritesOnly && (a.dataset.category ? a.dataset.category === activeCategory && activePrice === 'Todos' : a.dataset.price === activePrice && activeCategory === 'Todos'))));
- document.querySelectorAll('.category').forEach(b => b.setAttribute('aria-current', String(b.dataset.category === activeCategory)));
  $('favoritesBtn').setAttribute('aria-pressed', String(favoritesOnly));
- $('clearFilters').classList.toggle('hidden', activeCategory === 'Todos' && activePrice === 'Todos' && !query && !favoritesOnly && $('sortFilter').value === 'featured');
+ $('clearFilters')?.classList.toggle('hidden', activeCategory === scope.category && activePrice === scope.price && !query && !favoritesOnly && $('sortFilter')?.value === 'featured');
+}
+
+function syncFavoriteButtons(){
+ document.querySelectorAll('[data-favorite]').forEach(b => b.setAttribute('aria-pressed', String(favorites.includes(Number(b.dataset.favorite)))));
+ setCount($('favoriteCount'), favorites.length);
 }
 
 function renderProducts(){
+ if (!grid) return;
  const list = filteredProducts();
- $('productHeading').textContent = heading();
+ if (isHome) $('productHeading').textContent = heading();
  $('resultSummary').textContent = plural(list.length, 'produto', 'produtos');
- grid.innerHTML = list.map(p => {
-  const fav = favorites.includes(p.id);
-  return `<article class="product">
-  <div class="product-media"><img src="${p.image}" alt="" loading="lazy" width="600" height="600"><button class="fav" type="button" data-favorite="${p.id}" aria-pressed="${fav}" aria-label="Favoritar ${esc(p.name)}">${ic('heart')}</button></div>
-  <h3 class="product-name">${esc(p.name)}</h3>
-  <p class="product-detail">${esc(p.detail)}</p>
-  <div class="product-buy"><p class="product-price"><span>R$</span>${p.price}</p><button class="add" type="button" data-add="${p.id}" aria-label="Adicionar ${esc(p.name)} à sacola">${ic('plus')}Sacola</button></div>
- </article>`}).join('');
+ grid.innerHTML = list.map(p => productCard(p, base, favorites.includes(p.id))).join('');
  $('emptyState').classList.toggle('hidden', list.length > 0);
  grid.classList.toggle('hidden', list.length === 0);
- setCount($('favoriteCount'), favorites.length);
  syncControls();
 }
 
-function setCount(el, n){ el.textContent = n; el.toggleAttribute('data-zero', n === 0) }
 function cartQty(){ return cart.reduce((s, x) => s + x.qty, 0) }
 function subtotal(){ return cart.reduce((s, x) => s + x.qty * byId(x.id).price, 0) }
 
@@ -99,7 +80,7 @@ function renderCart(){
  $('shipBar').style.width = Math.min(100, sub / FREE_SHIPPING * 100) + '%';
  $('shippingValue').textContent = sub >= FREE_SHIPPING ? 'Grátis' : 'Calculado no pagamento';
  $('goCheckout').disabled = !qty;
- $('cartItems').innerHTML = cart.length ? cart.map(item => { const p = byId(item.id); return `<div class="cart-item"><img src="${p.image}" alt=""><div><h3>${esc(p.name)}</h3><span class="price">${money(p.price)}</span><div class="qty"><button type="button" data-qty="${p.id}" data-delta="-1" aria-label="Diminuir quantidade de ${esc(p.name)}">${ic('minus')}</button><output aria-label="Quantidade">${item.qty}</output><button type="button" data-qty="${p.id}" data-delta="1" aria-label="Aumentar quantidade de ${esc(p.name)}">${ic('plus')}</button></div></div><button class="remove" type="button" data-remove="${p.id}" aria-label="Remover ${esc(p.name)}">${ic('trash')}</button></div>` }).join('') : '<div class="cart-empty"><strong>Sua sacola está vazia</strong>Toque em “Sacola” em qualquer produto para adicioná-lo aqui.</div>';
+ $('cartItems').innerHTML = cart.length ? cart.map(item => { const p = byId(item.id); return `<div class="cart-item"><img src="${photo(p.image, 150)}" alt="" width="72" height="72"><div><a class="cart-item-name" href="${base}produtos/${p.slug}/">${esc(p.name)}</a><span class="price">${money(p.price)}</span><div class="qty"><button type="button" data-qty="${p.id}" data-delta="-1" aria-label="Diminuir quantidade de ${esc(p.name)}">${ic('minus')}</button><output aria-label="Quantidade">${item.qty}</output><button type="button" data-qty="${p.id}" data-delta="1" aria-label="Aumentar quantidade de ${esc(p.name)}">${ic('plus')}</button></div></div><button class="remove" type="button" data-remove="${p.id}" aria-label="Remover ${esc(p.name)}">${ic('trash')}</button></div>` }).join('') : '<div class="cart-empty"><strong>Sua sacola está vazia</strong>Toque em “Sacola” em qualquer produto para adicioná-lo aqui.</div>';
 }
 
 function openPanel(panel){
@@ -124,9 +105,7 @@ function openCheckout(){
 }
 
 function addToCart(id){ const item = cart.find(x => x.id === id); if (item) item.qty++; else cart.push({id, qty:1}); save(); renderCart(); toast(`${byId(id).name} adicionado à sacola`) }
-function applyCategory(cat){ activeCategory = cat; favoritesOnly = false; renderProducts(); scrollToProducts() }
-function applyPrice(price){ activePrice = String(price); favoritesOnly = false; renderProducts(); scrollToProducts() }
-function resetFilters(){ activeCategory = 'Todos'; activePrice = 'Todos'; query = ''; favoritesOnly = false; $('searchInput').value = ''; $('sortFilter').value = 'featured'; renderProducts() }
+function resetFilters(){ activeCategory = scope.category; activePrice = scope.price; query = ''; favoritesOnly = false; $('searchInput').value = ''; if ($('sortFilter')) $('sortFilter').value = 'featured'; if (isHome) history.replaceState(null, '', location.pathname); renderProducts() }
 
 function shippingCost(){ const sub = subtotal(), delivery = document.querySelector('input[name="delivery"]:checked')?.value; return delivery === 'express' ? EXPRESS : sub >= FREE_SHIPPING ? 0 : STANDARD }
 function renderCheckout(){
@@ -138,44 +117,47 @@ function renderCheckout(){
  $('checkoutTotal').textContent = money(sub + ship);
 }
 
-grid.addEventListener('click', e => {
- const add = e.target.closest('[data-add]'), fav = e.target.closest('[data-favorite]');
+document.addEventListener('click', e => {
+ const add = e.target.closest('[data-add]'), fav = e.target.closest('[data-favorite]'), seg = e.target.closest('[data-seg]');
+ const qty = e.target.closest('[data-qty]'), remove = e.target.closest('[data-remove]');
  if (add) addToCart(Number(add.dataset.add));
  if (fav) {
-  const id = Number(fav.dataset.favorite), on = !favorites.includes(id);
-  favorites = on ? [...favorites, id] : favorites.filter(x => x !== id);
-  save(); renderProducts();
-  grid.querySelector(`[data-favorite="${id}"]`)?.focus();
-  toast(on ? 'Salvo nos favoritos' : 'Removido dos favoritos');
+  const id = Number(fav.dataset.favorite), turnOn = !favorites.includes(id);
+  favorites = turnOn ? [...favorites, id] : favorites.filter(x => x !== id);
+  save();
+  if (favoritesOnly) { renderProducts(); grid.querySelector(`[data-favorite="${id}"]`)?.focus() }
+  syncFavoriteButtons();
+  toast(turnOn ? 'Salvo nos favoritos' : 'Removido dos favoritos');
  }
-});
-document.addEventListener('click', e => {
- const cat = e.target.closest('[data-category]'), price = e.target.closest('[data-price]'), seg = e.target.closest('[data-seg]');
- if (cat) { e.preventDefault(); applyCategory(cat.dataset.category) }
- else if (price) { e.preventDefault(); applyPrice(price.dataset.price) }
- else if (seg) { activePrice = seg.dataset.seg; favoritesOnly = false; renderProducts() }
- const qty = e.target.closest('[data-qty]'), remove = e.target.closest('[data-remove]');
+ if (seg) { activePrice = seg.dataset.seg; favoritesOnly = false; renderProducts() }
  if (qty) { const item = cart.find(x => x.id === Number(qty.dataset.qty)); if (item) { item.qty += Number(qty.dataset.delta); if (item.qty <= 0) cart = cart.filter(x => x !== item); save(); renderCart(); drawer.focus() } }
  if (remove) { cart = cart.filter(x => x.id !== Number(remove.dataset.remove)); save(); renderCart(); drawer.focus() }
 });
-$('categoryFilter').addEventListener('change', e => { activeCategory = e.target.value; favoritesOnly = false; renderProducts() });
-$('sortFilter').addEventListener('change', renderProducts);
-$('searchForm').addEventListener('submit', e => { e.preventDefault(); query = $('searchInput').value.trim(); favoritesOnly = false; renderProducts(); scrollToProducts() });
-$('searchInput').addEventListener('input', e => { if (!e.target.value) { query = ''; renderProducts() } });
-$('clearFilters').addEventListener('click', resetFilters);
-$('emptyReset').addEventListener('click', resetFilters);
-$('cartBtn').addEventListener('click', openCart);
-$('closeCart').addEventListener('click', closePanels);
-$('continueShopping').addEventListener('click', closePanels);
-overlay.addEventListener('click', closePanels);
-$('favoritesBtn').addEventListener('click', () => {
+on('categoryFilter', 'change', e => { activeCategory = e.target.value; favoritesOnly = false; renderProducts() });
+on('sortFilter', 'change', renderProducts);
+on('clearFilters', 'click', resetFilters);
+// Fora da home, a busca envia o formulário para a home (?q=); na home, filtra sem recarregar.
+on('searchForm', 'submit', e => {
+ if (!isHome) return;
+ e.preventDefault(); query = $('searchInput').value.trim(); favoritesOnly = false;
+ history.replaceState(null, '', query ? `?q=${encodeURIComponent(query)}` : location.pathname);
+ renderProducts(); scrollToProducts();
+});
+on('searchInput', 'input', e => { if (isHome && !e.target.value && query) { query = ''; history.replaceState(null, '', location.pathname); renderProducts() } });
+on('favoritesBtn', 'click', () => {
+ if (!isHome) { location.href = `${base || './'}?favoritos=1#produtos`; return }
  favoritesOnly = !favoritesOnly; activeCategory = 'Todos'; activePrice = 'Todos'; query = ''; $('searchInput').value = '';
+ history.replaceState(null, '', favoritesOnly ? '?favoritos=1' : location.pathname);
  renderProducts(); scrollToProducts();
  if (favoritesOnly && !favorites.length) toast('Toque no coração de um produto para salvá-lo aqui');
 });
-$('accountBtn').addEventListener('click', () => toast('A área de cliente ainda não existe neste protótipo'));
-$('goCheckout').addEventListener('click', () => cart.length && openCheckout());
-$('closeCheckout').addEventListener('click', closePanels);
+on('cartBtn', 'click', openCart);
+on('closeCart', 'click', closePanels);
+on('continueShopping', 'click', closePanels);
+overlay.addEventListener('click', closePanels);
+on('accountBtn', 'click', () => toast('A área de cliente ainda não existe neste protótipo'));
+on('goCheckout', 'click', () => cart.length && openCheckout());
+on('closeCheckout', 'click', closePanels);
 document.querySelectorAll('input[name="delivery"]').forEach(el => el.addEventListener('change', renderCheckout));
 
 const form = $('checkoutForm');
@@ -190,14 +172,16 @@ form.addEventListener('submit', e => {
   $('formError').classList.remove('hidden'); invalid[0].focus(); return;
  }
  const data = new FormData(form), first = String(data.get('name')).trim().split(' ')[0];
- const orderId = 'ZY-' + Math.floor(100000 + Math.random() * 900000), total = $('checkoutTotal').textContent;
+ const orderId = 'LB-' + Math.floor(100000 + Math.random() * 900000), total = $('checkoutTotal').textContent;
  $('checkoutLayout').classList.add('hidden');
  const success = $('checkoutSuccess');
- success.innerHTML = `<div class="ok">${ic('check')}</div><h3>Pedido ${orderId} registrado, ${esc(first)}.</h3><p class="slogan">Seu brilho é a sua presença</p><p>Total: <strong>${total}</strong>.</p><p class="muted">Como isto é uma simulação, nenhum pagamento foi feito e seus dados não saíram deste navegador.</p><button class="btn" id="finishDemo" type="button">Voltar para a loja</button>`;
+ success.innerHTML = `<div class="ok">${ic('check')}</div><p class="dialog-title">Pedido ${orderId} registrado, ${esc(first)}.</p><p class="slogan">Seu brilho é a sua presença</p><p>Total: <strong>${total}</strong>.</p><p class="muted">Como isto é uma simulação, nenhum pagamento foi feito e seus dados não saíram deste navegador.</p><button class="btn" id="finishDemo" type="button">Voltar para a loja</button>`;
  success.classList.remove('hidden'); $('finishDemo').focus();
  $('finishDemo').addEventListener('click', () => { cart = []; save(); form.reset(); renderCart(); closePanels(); toast('Sacola esvaziada. Boas compras!') });
 });
-$('newsletterForm').addEventListener('submit', e => { e.preventDefault(); e.target.reset(); toast('E-mail cadastrado (simulação)') });
+on('newsletterForm', 'submit', e => { e.preventDefault(); e.target.reset(); toast('E-mail cadastrado (simulação)') });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closePanels() });
 
-fillCounts(); renderProducts(); renderCart();
+if (query) $('searchInput').value = query;
+if (isHome && (query || favoritesOnly)) renderProducts(); else syncControls();
+syncFavoriteButtons(); renderCart();
